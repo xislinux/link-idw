@@ -1,5 +1,7 @@
 # downloads minecraft server jar for 1.21.11
 # https://piston-data.mojang.com/v1/objects/1087f90b4d73209318d87aa8deecfaae24861004/server.jar
 
-https://github.com/xislinux/git/releases/download/v1.0.0/paper-slimefun-server.7z.001
-https://github.com/xislinux/git/releases/download/v1.0.0/paper-slimefun-server.7z.002
+# https://github.com/xislinux/git/releases/download/v1.0.0/paper-slimefun-server.7z.001
+# https://github.com/xislinux/git/releases/download/v1.0.0/paper-slimefun-server.7z.002
+
+https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/Slimefun4-Dev-latest.jar
