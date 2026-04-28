@@ -1,24 +1,71 @@
-name: Download & Commit Slimefun4 to Repo
+name: Download Slimefun4 & Push to Repo
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (Dev or RC)'
+        required: true
+        default: 'Dev'
+        type: choice
+        options:
+          - Dev
+          - RC
 
 jobs:
-  commit-jar:
+  download-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to push to repo
     
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
-      - name: Download Slimefun4
+      - name: Download Slimefun4 with wget (follow redirects)
         run: |
-          curl -L -o plugins/Slimefun4-Dev.jar "https://blob.build/project/Slimefun4/Dev"
-          curl -L -o plugins/Slimefun4-RC.jar "https://blob.build/project/Slimefun4/RC"
+          URL="https://blob.build/project/Slimefun4/${{ github.event.inputs.version }}"
+          OUTPUT_FILE="Slimefun4-${{ github.event.inputs.version }}.jar"
+          
+          echo "Downloading from: $URL"
+          
+          # wget with --max-redirect to follow all redirects
+          wget --max-redirect=10 \
+               --trust-server-names \
+               --content-disposition \
+               -O "$OUTPUT_FILE" \
+               "$URL"
+          
+          # Show file info
+          ls -lh "$OUTPUT_FILE"
+          file "$OUTPUT_FILE"
       
-      - name: Commit and push
+      - name: Download both versions (optional)
+        if: github.event.inputs.version == 'Dev'
+        run: |
+          # Also download RC version
+          wget --max-redirect=10 \
+               --trust-server-names \
+               -O "Slimefun4-RC.jar" \
+               "https://blob.build/project/Slimefun4/RC"
+          ls -lh Slimefun4-RC.jar
+      
+      - name: Create plugins directory if needed
+        run: |
+          mkdir -p plugins slimefun-builds
+          mv *.jar plugins/ 2>/dev/null || true
+          mv *.jar slimefun-builds/ 2>/dev/null || true
+      
+      - name: Commit and push to repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add plugins/*.jar
-          git commit -m "Auto-update Slimefun4 from Blob Builds" || echo "No changes"
-          git push
+          
+          # Add all jar files
+          git add *.jar plugins/*.jar slimefun-builds/*.jar 2>/dev/null || true
+          
+          # Commit with timestamp
+          git commit -m "Auto-update Slimefun4 ${{ github.event.inputs.version }} - $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          
+          # Push to repository
+          git push origin HEAD:${{ github.ref_name }}
