@@ -5,6 +5,6 @@
 # https://github.com/xislinux/git/releases/download/v1.0.0/paper-slimefun-server.7z.002
 
 # https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/Slimefun4-Dev-latest.jar
-https://thebusybiscuit.github.io/builds/TheBusyBiscuit/ExoticGarden/master/ExoticGarden-Dev-latest.jar
-https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/InfinityExpansion-Dev-latest.jar
-https://thebusybiscuit.github.io/builds/Sefiraat/Simple-Storage/master/Simple-Storage-Dev-latest.jar
+https://thebusybiscuit.github.io/builds/TheBusyBiscuit/ExoticGarden/master/ExoticGarden-78.jar
+https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/InfinityExpansion-144.jar
+https://thebusybiscuit.github.io/builds/Sefiraat/Simple-Storage/master/Simple-Storage-10.jar
