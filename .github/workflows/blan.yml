@@ -1,10 +1,10 @@
-name: Push Slimefun to builds folder
+name: Download Latest Slimefun4 JAR
 
 on:
   workflow_dispatch:
 
 jobs:
-  push-to-builds:
+  download-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -12,18 +12,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Download and move to builds folder
+      - name: Get latest build number from blob.build
+        id: get-build
         run: |
-          mkdir -p builds/slimefun
-          wget --max-redirect=20 -O builds/slimefun/Slimefun4-Dev.jar "https://blob.build/project/Slimefun4/Dev"
-          ls -la builds/slimefun/
+          # Fetch the page and extract the latest build number
+          LATEST_BUILD=$(curl -s "https://blob.build/project/Slimefun4/Dev" | grep -oP 'Build <!-- -->\K\d+' | head -1)
+          echo "Latest build: $LATEST_BUILD"
+          echo "build_number=$LATEST_BUILD" >> $GITHUB_OUTPUT
       
-      - name: Push to repo
+      - name: Download Slimefun4 JAR with wget
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git add builds/
-          git commit -m "Update Slimefun4 build [skip ci]"
-          git push origin HEAD:main
+          BUILD_NUMBER="${{ steps.get-build.outputs.build_number }}"
+          DOWNLOAD_URL="https://blob.build/dl/Slimefun4/Dev/${BUILD_NUMBER}"
           
-          echo "✅ Pushed to: $(git remote get-url origin)"
+          echo "Downloading from: $DOWNLOAD_URL"
+          wget --max-redirect=10 --verbose -O "Slimefun4-Dev-${BUILD_NUMBER}.jar" "$DOWNLOAD_URL"
+          
+          # Also create a 'latest' symlink/copy
+          cp "Slimefun4-Dev-${BUILD_NUMBER}.jar" "Slimefun4-latest.jar"
+          
+          ls -lh *.jar
+      
+      - name: Commit and push to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add *.jar
+          git commit -m "Update Slimefun4 to build ${{ steps.get-build.outputs.build_number }}" || echo "No changes"
+          git push
