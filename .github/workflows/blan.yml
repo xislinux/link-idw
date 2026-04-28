@@ -1,0 +1,29 @@
+name: Push Slimefun to builds folder
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push-to-builds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download and move to builds folder
+        run: |
+          mkdir -p builds/slimefun
+          wget --max-redirect=20 -O builds/slimefun/Slimefun4-Dev.jar "https://blob.build/project/Slimefun4/Dev"
+          ls -la builds/slimefun/
+      
+      - name: Push to repo
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add builds/
+          git commit -m "Update Slimefun4 build [skip ci]"
+          git push origin HEAD:main
+          
+          echo "✅ Pushed to: $(git remote get-url origin)"
