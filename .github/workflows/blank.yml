@@ -1,0 +1,24 @@
+name: Download & Commit Slimefun4 to Repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  commit-jar:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download Slimefun4
+        run: |
+          curl -L -o plugins/Slimefun4-Dev.jar "https://blob.build/project/Slimefun4/Dev"
+          curl -L -o plugins/Slimefun4-RC.jar "https://blob.build/project/Slimefun4/RC"
+      
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add plugins/*.jar
+          git commit -m "Auto-update Slimefun4 from Blob Builds" || echo "No changes"
+          git push
