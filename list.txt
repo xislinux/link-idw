@@ -13,4 +13,6 @@
 
 # https://github.com/hexchat/hexchat/releases/download/v2.16.2/HexChat.2.16.2.x64.exe
 
-https://github.com/thelounge/thelounge-deb/releases/download/v4.4.3/thelounge_4.4.3_all.deb
+# https://github.com/thelounge/thelounge-deb/releases/download/v4.4.3/thelounge_4.4.3_all.deb
+
+https://github.com/element-hq/element-android/releases/download/v1.6.56/vector-gplay-arm64-v8a-release-signed.apk
