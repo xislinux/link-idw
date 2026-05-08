@@ -9,4 +9,6 @@
 # https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/InfinityExpansion-144.jar
 # https://thebusybiscuit.github.io/builds/Sefiraat/Simple-Storage/master/Simple-Storage-10.jar
 
-https://www.unrealircd.org/download/6.0/6.1.9.1/winssl/unrealircd-6.1.9.1.exe
+# https://www.unrealircd.org/download/6.0/6.1.9.1/winssl/unrealircd-6.1.9.1.exe
+
+https://github.com/hexchat/hexchat/releases/download/v2.16.2/HexChat.2.16.2.x64.exe
